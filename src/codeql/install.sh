@@ -20,7 +20,6 @@ echo "The effective dev container containerUser is '$_CONTAINER_USER'"
 echo "The effective dev container containerUser's home directory is '$_CONTAINER_USER_HOME'"
 
 
-# Function to get the list of valid CodeQL releases from the GitHub API
 get_valid_releases() {
     echo "Getting valid CodeQL releases from GitHub API"
 
@@ -32,7 +31,7 @@ get_valid_releases() {
         response=$(curl -s "https://api.github.com/repos/github/codeql-action/releases?per_page=100&page=$page")
 
         # Check if there are no more releases
-        if [ "$(echo "$response" | jq '. | length')"  -eq 0 ]; then
+        if [ "$(echo "$response" | jq '. | length')" -eq 0 ]; then
             break
         fi
 
@@ -50,18 +49,21 @@ get_valid_releases() {
 
     # Set the codeql version to the latest if it is not provided
     if [ "$CODEQL_VERSION" = "latest" ]; then
-        CODEQL_LATEST=$( echo ${releases} | head -n 1)
-        CODEQL_VERSION=${CODEQL_LATEST#codeql-bundle-v}
+        # Get the latest release
+        CODEQL_LATEST=$(echo "$releases" | head -n 1)
+        CODEQL_VERSION=${CODEQL_LATEST#codeql-bundle-v}  # Remove the prefix 'codeql-bundle-v'
         echo "Setting the CodeQL version to the latest: $CODEQL_VERSION"
     fi
 }
 
-
 check_version() {
     echo "Checking if the provided version is valid"
 
-    # Fetch valid tags and check if the current version is in the list
-    if get_valid_releases | grep -qx "codeql-bundle-v$CODEQL_VERSION"; then
+    # Fetch valid releases
+    valid_releases=$(get_valid_releases)
+
+    # Check if the current version is in the list of valid releases
+    if echo "$valid_releases" | grep -qx "codeql-bundle-v$CODEQL_VERSION"; then
         echo "The provided CodeQL version ($CODEQL_VERSION) is valid."
     else
         echo "The provided CodeQL version ($CODEQL_VERSION) is not valid."
