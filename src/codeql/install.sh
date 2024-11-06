@@ -31,6 +31,36 @@ check_version() {
     fi
 }
 
+install_packages(){
+    apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+        software-properties-common \
+        curl \
+        git \
+        git-lfs \
+        build-essential \
+        unzip \
+        apt-transport-https \
+        python3.10 \
+        python3-venv \
+        python3-pip \
+        python3-setuptools \
+        python3-dev \
+        python-is-python3 \
+        gnupg \
+        g++ \
+        make \
+        gcc \
+        apt-utils \
+        && \
+        apt-get clean \
+        docker-cli
+
+    # Clean up
+    apt-get clean && apt-get autoremove
+}
+
 install_codeql(){    
     mkdir ${CODEQL_HOME}
 
@@ -44,5 +74,7 @@ install_codeql(){
 }
 
 check_version
+
+install_packages
 
 install_codeql
