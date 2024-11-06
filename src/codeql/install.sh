@@ -77,6 +77,7 @@ install_packages() {
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
+        curl \
         jq
 
     # Clean up
@@ -96,8 +97,8 @@ install_codeql() {
     rm /tmp/codeql-bundle-linux64.tar.gz
 }
 
-check_version
-
 install_packages
+
+check_version
 
 install_codeql
