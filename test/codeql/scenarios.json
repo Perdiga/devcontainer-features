@@ -1,9 +1,9 @@
 {
-    "hello": {
+    "check_codeql_version": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
-            "hello": {
-                "greeting": "hello"
+            "codeql": {
+                "codeql_version": "2.19.1"
             }
         }
     }

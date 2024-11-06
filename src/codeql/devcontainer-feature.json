@@ -1,0 +1,22 @@
+{
+    "name": "CodeQL",
+    "id": "codeql",
+    "version": "1.0.0",
+    "description": "Install the CodeQL CLI and the packages required to run CodeQL queries",
+    "options": {
+        "codeql_version": {
+            "type": "string",
+            "proposals": [
+                "2.19.1"
+            ],
+            "default": "2.19.1",
+            "description": "Select the version of the CodeQL CLI to install"
+        }
+    },
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/common-utils"
+    ],
+    "containerEnv": {
+        "PATH": "/usr/local/codeql-home/codeql:${PATH}"
+    }
+}

@@ -1,15 +1,13 @@
 
-# Hello, World! (hello)
+# CodeQL CLI 
 
-A hello world feature
+Install the CodeQL CLI and the packages required to run CodeQL queries
 
 ## Example Usage
 
 ```json
 "features": {
-    "ghcr.io/devcontainers/feature-starter/hello:1": {
-        "version": "latest"
-    }
+    "ghcr.io/perdiga/devcontainer-features/codeql:1": {}
 }
 ```
 
@@ -17,7 +15,7 @@ A hello world feature
 
 | Options Id | Description | Type | Default Value |
 |-----|-----|-----|-----|
-| greeting | Select a pre-made greeting, or enter your own | string | hey |
+| codeql_version | Select a pre-made greeting, or enter your own CodeQl version | string | 2.19.1 |
 
 
 
