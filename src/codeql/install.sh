@@ -52,7 +52,8 @@ get_valid_releases() {
 
     # Set the codeql version to the latest if it is not provided
     if [ "$CODEQL_VERSION" == "latest" ]; then
-        CODEQL_VERSION=$( echo ${releases} | head -n 1)
+        CODEQL_LATEST=$( echo ${releases} | head -n 1)
+        CODEQL_VERSION=${CODEQL_LATEST#codeql-bundle-v}
         echo "Setting the CodeQL version to the latest: $CODEQL_VERSION"
     fi
 }
@@ -66,9 +67,8 @@ check_version() {
         echo "The provided CodeQL version ($CODEQL_VERSION) is valid."
     else
         echo "The provided CodeQL version ($CODEQL_VERSION) is not valid."
-        #exit 1
+        exit 1
     fi
-
 }
 
 install_packages() {
