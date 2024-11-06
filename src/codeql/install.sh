@@ -53,8 +53,8 @@ install_codeql() {
     # Install CodeQL
     cd /tmp 
 
-    echo "Downloading CodeQL bundle v${CODEQL_VERSION}"
-    curl -OL https://github.com/github/codeql-action/releases/download/codeql-bundle-v${CODEQL_VERSION}/codeql-bundle-linux64.tar.gz
+    echo "Downloading CodeQL bundle v${CODEQL_TAG}"
+    curl -OL https://github.com/github/codeql-action/releases/download/${CODEQL_TAG}/codeql-bundle-linux64.tar.gz
     tar -xvf /tmp/codeql-bundle-linux64.tar.gz --directory ${CODEQL_HOME} 
     rm /tmp/codeql-bundle-linux64.tar.gz
 }
