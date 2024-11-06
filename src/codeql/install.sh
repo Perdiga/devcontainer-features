@@ -32,7 +32,7 @@ get_valid_releases() {
         response=$(curl -s "https://api.github.com/repos/github/codeql-action/releases?per_page=100&page=$page")
 
         # Check if there are no more releases
-        if [ $(echo "$response" | jq '. | length') -eq 0 ]; then
+        if [ "$(echo "$response" | jq '. | length')"  -eq 0 ]; then
             break
         fi
 
@@ -46,12 +46,10 @@ get_valid_releases() {
 
     # Print all valid releases, one per line
     echo "Valid CodeQL releases:"
-    for release in "${releases[@]}"; do
-        echo "$release"
-    done
+    printf "%s" "$releases"
 
     # Set the codeql version to the latest if it is not provided
-    if [ "$CODEQL_VERSION" == "latest" ]; then
+    if [ "$CODEQL_VERSION" = "latest" ]; then
         CODEQL_LATEST=$( echo ${releases} | head -n 1)
         CODEQL_VERSION=${CODEQL_LATEST#codeql-bundle-v}
         echo "Setting the CodeQL version to the latest: $CODEQL_VERSION"
