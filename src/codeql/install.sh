@@ -42,8 +42,9 @@ install_packages() {
         curl \
         jq
 
-    # Clean up
-    apt-get clean && apt-get autoremove
+    echo "Installed packages:"
+    curl --version
+    jq --version
 }
 
 install_codeql() {    
