@@ -32,7 +32,7 @@ get_valid_releases() {
         response=$(curl -s "https://api.github.com/repos/github/codeql-action/releases?per_page=100&page=$page")
 
         # Check if there are no more releases
-        if [[ $(echo "$response" | jq '. | length') -eq 0 ]]; then
+        if [ $(echo "$response" | jq '. | length') -eq 0 ]; then
             break
         fi
 
@@ -41,7 +41,7 @@ get_valid_releases() {
         releases="${releases}${valid_releases}\n"
 
         # Move to the next page
-        ((page++))
+        page=$((page + 1))
     done
 
     # Print all valid releases, one per line
