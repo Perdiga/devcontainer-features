@@ -29,6 +29,7 @@ get_valid_releases() {
     while true; do
         # Fetch a page of releases
         response=$(curl -s "https://api.github.com/repos/github/codeql-action/releases?per_page=100&page=$page")
+        echo "debug: response: $response"
 
         # Check if there are no more releases
         if [ "$(echo "$response" | jq '. | length')" -eq 0 ]; then
