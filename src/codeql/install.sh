@@ -25,7 +25,7 @@ get_valid_releases() {
     echo "Getting valid CodeQL releases from GitHub API"
 
     page=1
-    releases=()
+    releases=""
 
     while true; do
         # Fetch a page of releases
@@ -38,7 +38,7 @@ get_valid_releases() {
 
         # Extract valid releases and add to the list
         valid_releases=$(echo "$response" | jq -r '.[].tag_name' | grep '^codeql-bundle-v')
-        releases+=($valid_releases)
+        releases="${releases}${valid_releases}\n"
 
         # Move to the next page
         ((page++))
