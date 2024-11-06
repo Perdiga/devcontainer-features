@@ -59,11 +59,8 @@ get_valid_releases() {
 check_version() {
     echo "Checking if the provided version is valid"
 
-    # Fetch valid releases
-    valid_releases=$(get_valid_releases)
-
     # Check if the current version is in the list of valid releases
-    if echo "$valid_releases" | grep -qx "codeql-bundle-v$CODEQL_VERSION"; then
+    if get_valid_releases | grep -qx "codeql-bundle-v$CODEQL_VERSION"; then
         echo "The provided CodeQL version ($CODEQL_VERSION) is valid."
     else
         echo "The provided CodeQL version ($CODEQL_VERSION) is not valid."
