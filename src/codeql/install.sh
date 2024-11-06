@@ -41,7 +41,10 @@ install_packages() {
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
         curl \
-        jq
+        jq \
+        ca-certificates
+
+    update-ca-certificates
 
     echo "Installed packages:"
     curl --version
