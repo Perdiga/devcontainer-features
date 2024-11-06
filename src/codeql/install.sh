@@ -72,6 +72,6 @@ install_codeql(){
 
 check_version
 
-#install_packages
+install_packages
 
 install_codeql
