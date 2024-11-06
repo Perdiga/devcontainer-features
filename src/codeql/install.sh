@@ -22,7 +22,6 @@ echo "The effective dev container containerUser's home directory is '$_CONTAINER
 
 check_version() {
     echo "Checking version"
-    curl -v https://api.github.com/repos/github/codeql-action/releases/latest
 
     # Set the codeql version to the latest if it is not provided
     if [ "$CODEQL_VERSION" = "latest" ]; then

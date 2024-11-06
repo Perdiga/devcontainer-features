@@ -1,5 +1,5 @@
 {
-    "check_codeql_version": {
+    "codeql_version": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
             "codeql": {
