@@ -2,7 +2,7 @@
 set -e
 
 CODEQL_HOME=/usr/local/codeql-home
-
+CODEQL_TAG=""
 echo "Activating feature 'CodeQL'"
 echo "The provided CodeQL version is: $CODEQL_VERSION"
 echo "The CodeQL home directory is: $CODEQL_HOME"
@@ -19,59 +19,52 @@ echo "The effective dev container remoteUser's home directory is '$_REMOTE_USER_
 echo "The effective dev container containerUser is '$_CONTAINER_USER'"
 echo "The effective dev container containerUser's home directory is '$_CONTAINER_USER_HOME'"
 
-check_version() {
-    if [ -z "$1" ]; then
-        echo "Version is not provided"
-        exit 1
-    fi
 
-    if ! [[ "$1" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-        echo "Version is not valid. Please provide a valid version"
-        exit 1
+check_version() {
+    echo "Checking version"
+
+    # Set the codeql version to the latest if it is not provided
+    if [ "$CODEQL_VERSION" = "latest" ]; then
+        CODEQL_TAG=$(curl -s https://api.github.com/repos/github/codeql-action/releases/latest | jq -r '.tag_name')
+        echo "Setting the CodeQL version to the latest: $CODEQL_TAG"
+    else
+        CODEQL_TAG="codeql-bundle-v$CODEQL_VERSION"
+        echo "Using provided version: $CODEQL_TAG"
     fi
 }
 
-install_packages(){
+install_packages() {
+    echo "Installing required packages"
+
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-        software-properties-common \
         curl \
-        git \
-        git-lfs \
-        build-essential \
-        unzip \
-        apt-transport-https \
-        python3.10 \
-        python3-venv \
-        python3-pip \
-        python3-setuptools \
-        python3-dev \
-        python-is-python3 \
-        gnupg \
-        g++ \
-        make \
-        gcc \
-        apt-utils 
+        jq \
+        ca-certificates
 
-    # Clean up
-    apt-get clean && apt-get autoremove
+    update-ca-certificates
+
+    echo "Installed packages:"
+    curl --version
+    jq --version
 }
 
-install_codeql(){    
+install_codeql() {    
+    echo "Installing CodeQL"
     mkdir ${CODEQL_HOME}
 
     # Install CodeQL
     cd /tmp 
 
-    echo "Downloading CodeQL bundle v${CODEQL_VERSION}"
-    curl -OL https://github.com/github/codeql-action/releases/download/codeql-bundle-v${CODEQL_VERSION}/codeql-bundle-linux64.tar.gz
+    echo "Downloading CodeQL bundle v${CODEQL_TAG}"
+    curl -OL https://github.com/github/codeql-action/releases/download/${CODEQL_TAG}/codeql-bundle-linux64.tar.gz
     tar -xvf /tmp/codeql-bundle-linux64.tar.gz --directory ${CODEQL_HOME} 
     rm /tmp/codeql-bundle-linux64.tar.gz
 }
 
-check_version
+install_packages
 
-#install_packages
+check_version
 
 install_codeql
