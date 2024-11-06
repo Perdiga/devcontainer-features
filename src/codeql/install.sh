@@ -22,15 +22,6 @@ echo "The effective dev container containerUser's home directory is '$_CONTAINER
 check_version() {
     echo "Checking if the provided version is valid"
 
-    if [ -z "$1" ]; then
-        echo "Version is not provided"
-        exit 1
-    fi
-
-    if ! [[ "$1" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-        echo "Version is not valid. Please provide a valid version"
-        exit 1
-    fi
 }
 
 install_packages() {
