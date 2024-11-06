@@ -7,9 +7,9 @@
         "codeql_version": {
             "type": "string",
             "proposals": [
-                "2.19.1"
+                "latest"
             ],
-            "default": "2.19.1",
+            "default": "latest",
             "description": "Select the version of the CodeQL CLI to install"
         }
     },
