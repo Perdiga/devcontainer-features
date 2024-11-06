@@ -20,6 +20,8 @@ echo "The effective dev container containerUser is '$_CONTAINER_USER'"
 echo "The effective dev container containerUser's home directory is '$_CONTAINER_USER_HOME'"
 
 check_version() {
+    echo "Checking if the provided version is valid"
+
     if [ -z "$1" ]; then
         echo "Version is not provided"
         exit 1
@@ -31,7 +33,9 @@ check_version() {
     fi
 }
 
-install_packages(){
+install_packages() {
+    echo "Installing required packages"
+
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
@@ -58,7 +62,8 @@ install_packages(){
     apt-get clean && apt-get autoremove
 }
 
-install_codeql(){    
+install_codeql() {    
+    echo "Installing CodeQL"
     mkdir ${CODEQL_HOME}
 
     # Install CodeQL
