@@ -19,8 +19,55 @@ echo "The effective dev container remoteUser's home directory is '$_REMOTE_USER_
 echo "The effective dev container containerUser is '$_CONTAINER_USER'"
 echo "The effective dev container containerUser's home directory is '$_CONTAINER_USER_HOME'"
 
+
+# Function to get the list of valid CodeQL releases from the GitHub API
+get_valid_releases() {
+    echo "Getting valid CodeQL releases from GitHub API"
+
+    page=1
+    releases=()
+
+    while true; do
+        # Fetch a page of releases
+        response=$(curl -s "https://api.github.com/repos/github/codeql-action/releases?per_page=100&page=$page")
+
+        # Check if there are no more releases
+        if [[ $(echo "$response" | jq '. | length') -eq 0 ]]; then
+            break
+        fi
+
+        # Extract valid releases and add to the list
+        valid_releases=$(echo "$response" | jq -r '.[].tag_name' | grep '^codeql-bundle-v')
+        releases+=($valid_releases)
+
+        # Move to the next page
+        ((page++))
+    done
+
+    # Print all valid releases, one per line
+    echo "Valid CodeQL releases:"
+    for release in "${releases[@]}"; do
+        echo "$release"
+    done
+
+    # Set the codeql version to the latest if it is not provided
+    if [ "$CODEQL_VERSION" == "latest" ]; then
+        CODEQL_VERSION=$( echo ${releases} | head -n 1)
+        echo "Setting the CodeQL version to the latest: $CODEQL_VERSION"
+    fi
+}
+
+
 check_version() {
     echo "Checking if the provided version is valid"
+
+    # Fetch valid tags and check if the current version is in the list
+    if get_valid_releases | grep -qx "codeql-bundle-v$CODEQL_VERSION"; then
+        echo "The provided CodeQL version ($CODEQL_VERSION) is valid."
+    else
+        echo "The provided CodeQL version ($CODEQL_VERSION) is not valid."
+        #exit 1
+    fi
 
 }
 
@@ -30,24 +77,7 @@ install_packages() {
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-        software-properties-common \
-        curl \
-        git \
-        git-lfs \
-        build-essential \
-        unzip \
-        apt-transport-https \
-        python3.10 \
-        python3-venv \
-        python3-pip \
-        python3-setuptools \
-        python3-dev \
-        python-is-python3 \
-        gnupg \
-        g++ \
-        make \
-        gcc \
-        apt-utils 
+        jq
 
     # Clean up
     apt-get clean && apt-get autoremove
